@@ -6,7 +6,7 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      background: #f4f6f8;
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -14,57 +14,65 @@
     }
 
     .login-box {
-      background: white;
+      background: #ffffff;
       padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
       text-align: center;
-      width: 300px;
+      width: 320px;
     }
 
     h1 {
-      margin-bottom: 10px;
-      font-size: 40px;
-      color: #333;
+      margin-bottom: 5px;
+      font-size: 38px;
+      color: #222;
+      letter-spacing: 1px;
     }
 
     h2 {
-      margin-bottom: 20px;
-      color: #666;
+      margin-bottom: 25px;
+      color: #777;
+      font-weight: normal;
+      font-size: 16px;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
+      padding: 12px;
+      margin: 8px 0;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       outline: none;
+      font-size: 14px;
+      transition: 0.2s;
     }
 
     input:focus {
-      border-color: #4facfe;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 2px rgba(74,144,226,0.1);
     }
 
     button {
       width: 100%;
-      padding: 10px;
-      background: #4facfe;
+      padding: 12px;
+      margin-top: 10px;
+      background: #2c3e50;
       border: none;
       color: white;
-      font-size: 16px;
+      font-size: 15px;
       border-radius: 8px;
       cursor: pointer;
+      transition: 0.2s;
     }
 
     button:hover {
-      background: #3a8be0;
+      background: #1f2d3a;
     }
 
     #mensaje {
-      margin-top: 10px;
-      color: red;
-      font-size: 14px;
+      margin-top: 12px;
+      color: #e74c3c;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -72,7 +80,7 @@
 
 <div class="login-box">
   <h1>Hyisx</h1>
-  <h2>Iniciar sesión</h2>
+  <h2>Acceso privado</h2>
 
   <input type="email" id="email" placeholder="Correo">
   <input type="password" id="password" placeholder="Contraseña">
@@ -87,14 +95,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE",
-  messagingSenderId: "TU_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyBm7_S2vA9580O9s1IRa_XFy4Dn-3DOfFE",
+  authDomain: "hyisxssgdgd.firebaseapp.com",
+  projectId: "hyisxssgdgd",
+  storageBucket: "hyisxssgdgd.firebasestorage.app",
+  messagingSenderId: "334586019647",
+  appId: "1:334586019647:web:57aa2ed86d62059491dd8a"
 };
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
