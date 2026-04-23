@@ -2,10 +2,14 @@
 <html>
 <head>
   <title>Login</title>
+
+  <!-- Fuente moderna -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      font-family: 'Inter', sans-serif;
       background: #f4f6f8;
       height: 100vh;
       display: flex;
@@ -15,31 +19,54 @@
 
     .login-box {
       background: #ffffff;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 45px;
+      border-radius: 14px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
       text-align: center;
       width: 320px;
+      animation: aparecer 0.6s ease;
+    }
+
+    @keyframes aparecer {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
       margin-bottom: 5px;
-      font-size: 38px;
+      font-size: 36px;
       color: #222;
-      letter-spacing: 1px;
     }
 
     h2 {
       margin-bottom: 25px;
       color: #777;
-      font-weight: normal;
-      font-size: 16px;
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .input-group span {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
-      margin: 8px 0;
+      padding: 12px 12px 12px 35px;
       border-radius: 8px;
       border: 1px solid #ddd;
       outline: none;
@@ -50,6 +77,15 @@
     input:focus {
       border-color: #4a90e2;
       box-shadow: 0 0 0 2px rgba(74,144,226,0.1);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 14px;
     }
 
     button {
@@ -69,21 +105,56 @@
       background: #1f2d3a;
     }
 
+    button:active {
+      transform: scale(0.97);
+    }
+
     #mensaje {
       margin-top: 12px;
       color: #e74c3c;
       font-size: 13px;
     }
+
+    /* 🌙 Modo oscuro */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #1e1e1e;
+      }
+
+      .login-box {
+        background: #2c2c2c;
+        color: white;
+      }
+
+      input {
+        background: #3a3a3a;
+        color: white;
+        border: 1px solid #555;
+      }
+
+      h2 {
+        color: #aaa;
+      }
+    }
   </style>
 </head>
+
 <body>
 
 <div class="login-box">
   <h1>Hyisx</h1>
   <h2>Acceso privado</h2>
 
-  <input type="email" id="email" placeholder="Correo">
-  <input type="password" id="password" placeholder="Contraseña">
+  <div class="input-group">
+    <span>📧</span>
+    <input type="email" id="email" placeholder="Correo">
+  </div>
+
+  <div class="input-group">
+    <span>🔒</span>
+    <input type="password" id="password" placeholder="Contraseña">
+    <span class="password-toggle" onclick="togglePassword()">👁️</span>
+  </div>
 
   <button onclick="login()">Entrar</button>
 
@@ -109,13 +180,21 @@ window.login = function() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
+  document.querySelector("button").innerText = "Entrando...";
+
   signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       window.location.href = "privado.html";
     })
-    .catch((error) => {
-      document.getElementById("mensaje").innerText = error.message;
+    .catch(() => {
+      document.getElementById("mensaje").innerText = "Correo o contraseña incorrectos";
+      document.querySelector("button").innerText = "Entrar";
     });
+}
+
+window.togglePassword = function() {
+  const input = document.getElementById("password");
+  input.type = input.type === "password" ? "text" : "password";
 }
 </script>
 
