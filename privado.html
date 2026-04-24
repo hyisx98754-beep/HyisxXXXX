@@ -14,6 +14,7 @@ style="position:fixed; top:10px; right:10px; font-size:20px; z-index:1000;">
 </button>
 
 <h2>Chat 💬</h2>
+  <div id="usuariosOnline"></div>
 
 <button onclick="abrir('info')">📁 Información</button>
 <button onclick="abrir('notas')">📁 Notas</button>
@@ -47,6 +48,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, getDoc, query, orderBy, deleteDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getDatabase, ref, set, onValue, onDisconnect } 
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 /* 🔔 NOTIFICACIONES */
 window.activarNotificaciones = async function() {
@@ -72,19 +75,37 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
+const rtdb = getDatabase(app);
+  
 let usuarioActual = null;
 
 /* 🔐 LOGIN */
 onAuthStateChanged(auth, (user) => {
-  if (!user) {
+   if (!user) {
     window.location.href = "index.html";
   } else {
     usuarioActual = user.email;
+
+    // 🟢 REFERENCIA DEL USUARIO (usando email)
+    const userRef = ref(rtdb, "usuarios/" + user.email.replace(/\./g, "_"));
+
+    // 🟢 ONLINE
+    set(userRef, {
+      online: true,
+      ultimaConexion: Date.now()
+    });
+
+    // 🔴 OFFLINE AUTOMÁTICO
+    onDisconnect(userRef).set({
+      online: false,
+      ultimaConexion: Date.now()
+    });
+
     cargarInfo();
     abrir("chat");
   }
 });
+ 
 
 /* 💬 CHAT */
 const q = query(collection(db, "mensajes"), orderBy("fecha", "asc"));
@@ -182,9 +203,23 @@ async function cargarInfo() {
 
   if (docSnap.exists()) {
     document.getElementById("textoInfo").value = docSnap.data().contenido;
+  
   }
 }
+onValue(ref(rtdb, "usuarios"), (snapshot) => {
+  const data = snapshot.val();
+  const contenedor = document.getElementById("usuariosOnline");
 
+  contenedor.innerHTML = "<b>Usuarios online:</b><br>";
+
+  if (!data) return;
+
+  for (let user in data) {
+    if (data[user].online) {
+      contenedor.innerHTML += "🟢 " + user + "<br>";
+    }
+  }
+});
 </script>
 
 </body>
