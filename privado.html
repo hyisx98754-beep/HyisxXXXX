@@ -210,14 +210,33 @@ onValue(ref(rtdb, "usuarios"), (snapshot) => {
   const data = snapshot.val();
   const contenedor = document.getElementById("usuariosOnline");
 
-  contenedor.innerHTML = "<b>Usuarios online:</b><br>";
+  contenedor.innerHTML = "<b>Usuarios:</b><br>";
 
   if (!data) return;
 
   for (let user in data) {
-    if (data[user].online) {
-      contenedor.innerHTML += "🟢 " + user + "<br>";
+    const info = data[user];
+
+    let estado = "";
+
+    if (info.online) {
+      estado = "🟢 En línea";
+    } else {
+      const ahora = Date.now();
+      const diferencia = Math.floor((ahora - info.ultimaConexion) / 1000);
+
+      if (diferencia < 60) {
+        estado = "🔴 hace unos segundos";
+      } else if (diferencia < 3600) {
+        estado = "🔴 hace " + Math.floor(diferencia / 60) + " min";
+      } else {
+        estado = "🔴 hace " + Math.floor(diferencia / 3600) + " h";
+      }
     }
+
+    const nombre = user.replace(/_/g, ".");
+
+    contenedor.innerHTML += `${estado} ${nombre}<br>`;
   }
 });
 </script>
