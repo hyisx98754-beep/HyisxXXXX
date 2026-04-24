@@ -206,6 +206,10 @@ async function cargarInfo() {
   
   }
 }
+  const nombres = {
+  "systexhyisx@gmail_com": "Systex",
+  "twicehyisx@gmail_com": "Twice"
+};
 onValue(ref(rtdb, "usuarios"), (snapshot) => {
   const data = snapshot.val();
   const contenedor = document.getElementById("usuariosOnline");
@@ -234,7 +238,7 @@ onValue(ref(rtdb, "usuarios"), (snapshot) => {
       }
     }
 
-    const nombre = user.replace(/_/g, ".");
+  const nombre = nombres[user] || user.replace(/_/g, ".");
 
     contenedor.innerHTML += `${estado} ${nombre}<br>`;
   }
