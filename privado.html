@@ -127,16 +127,32 @@ onSnapshot(q, (snapshot) => {
     }
 
     // Mostrar mensaje o imagen
-    if (data.texto && data.texto.includes("http")) {
-      chat.innerHTML += `
-        <p><b>${data.usuario}:</b> ${botonBorrar}</p>
-        <img src="${data.texto.trim()}" style="max-width:200px;">
-      `;
-    } else {
-      chat.innerHTML += `
-        <p><b>${data.usuario}:</b> ${data.texto} ${botonBorrar}</p>
-      `;
-    }
+   const fecha = new Date(data.fecha);
+const hora = fecha.getHours().toString().padStart(2, '0') + ":" +
+             fecha.getMinutes().toString().padStart(2, '0');
+
+// 📷 IMAGEN
+if (data.texto && data.texto.includes("http")) {
+  chat.innerHTML += `
+    <p>
+      <b>${data.usuario}:</b> 
+      <span style="color:#888; font-size:11px;">${hora}</span>
+      ${botonBorrar}
+    </p>
+    <img src="${data.texto.trim()}" style="max-width:200px;">
+  `;
+} 
+
+// 💬 TEXTO
+else {
+  chat.innerHTML += `
+    <p>
+      <b>${data.usuario}:</b> ${data.texto}
+      <span style="color:#888; font-size:11px; margin-left:5px;">${hora}</span>
+      ${botonBorrar}
+    </p>
+  `;
+}
 
     // 🔔 NOTIFICACIÓN
     if (!primeraCarga && data.usuario !== usuarioActual) {
