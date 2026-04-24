@@ -83,11 +83,47 @@ const q = query(collection(db, "mensajes"), orderBy("fecha", "asc"));
 
 let primeraCarga = true;
 
+let primeraCarga = true;
+
 onSnapshot(q, (snapshot) => {
   const chat = document.getElementById("chat");
   chat.innerHTML = "";
 
   snapshot.forEach((docu) => {
+    const data = docu.data();
+
+    let botonBorrar = "";
+
+    // 👑 SOLO TÚ
+    if (usuarioActual === "systexhyisx@gmail.com") {
+      botonBorrar = `<button onclick="borrar('${docu.id}')">❌</button>`;
+    }
+
+    // Mostrar mensaje o imagen
+    if (data.texto && data.texto.includes("http")) {
+      chat.innerHTML += `
+        <p><b>${data.usuario}:</b> ${botonBorrar}</p>
+        <img src="${data.texto.trim()}" style="max-width:200px;">
+      `;
+    } else {
+      chat.innerHTML += `
+        <p><b>${data.usuario}:</b> ${data.texto} ${botonBorrar}</p>
+      `;
+    }
+
+    // 🔔 Notificación
+    if (!primeraCarga && data.usuario !== usuarioActual) {
+      if (Notification.permission === "granted") {
+        new Notification("Nuevo mensaje", {
+          body: data.usuario + ": " + data.texto
+        });
+      }
+    }
+  });
+
+  chat.scrollTop = chat.scrollHeight;
+  primeraCarga = false;
+});
     const data = docu.data();
 
     // Mostrar mensaje
